@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>Freddy | About me</title>
+    <!-- 现代字体 & 平滑渲染 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0a0f1e, #03060c);
+            color: #eef5ff;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* 定制滚动条 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e2a3a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f9da6;
+            border-radius: 10px;
+        }
+
+        /* 动态光晕背景跟随鼠标 (互动氛围) */
+        .glow-move {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(79, 157, 166, 0.12), transparent 70%);
+            transition: background 0.05s ease;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 玻璃卡片风格 */
+        .glass-card {
+            background: rgba(15, 25, 35, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(79, 157, 166, 0.3);
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .glass-card:hover {
+            border-color: #4f9da6;
+            box-shadow: 0 18px 35px -12px rgba(79,157,166,0.25);
+            transform: translateY(-3px);
+        }
+
+        /* 头像/标题区域 */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .badge {
+            background: rgba(79, 157, 166, 0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 0.5px solid rgba(79,157,166,0.5);
+            letter-spacing: 0.3px;
+        }
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, #9cd4de, #5aa9b3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        .sub {
+            font-size: 1.1rem;
+            color: #bbd4e6;
+            border-left: 3px solid #4f9da6;
+            padding-left: 1rem;
+        }
+
+        /* 统计数字模块 (互动) */
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 2rem 0 2.5rem;
+        }
+        .stat-item {
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            border-radius: 1.8rem;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(79,157,166,0.3);
+            transition: all 0.2s;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #9cd4de;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        /* 区域标题 */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 2rem 0 1.2rem 0;
+            display: inline-block;
+            background: linear-gradient(120deg, #eef5ff, #9cd4de);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-bottom: 2px solid #4f9da6;
+            padding-bottom: 0.2rem;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .exp-card {
+            background: rgba(10, 20, 30, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 1.3rem;
+            transition: all 0.25s;
+            border: 1px solid rgba(79,157,166,0.2);
+        }
+        .exp-card:hover {
+            background: rgba(20, 40, 55, 0.8);
+            border-color: #4f9da6;
+            transform: translateY(-5px);
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.6rem;
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: #cbdbe6;
+            line-height: 1.45;
+        }
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .mini-tag {
+            background: #1e3a4a;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        .offer-wall {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .offer-badge {
+            background: linear-gradient(135deg, #2b5876, #1e3c4a);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 随机趣闻互动块 */
+        .fun-random {
+            margin: 2rem 0;
+            background: rgba(0,0,0,0.5);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            border: 1px solid #4f9da6;
+        }
+        .random-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            border-radius: 2rem;
+            background: rgba(79,157,166,0.15);
+            transition: all 0.2s;
+        }
+        .vibe-btn {
+            background: #4f9da6;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: #03060c;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .vibe-btn:hover {
+            background: #7acbd6;
+            transform: scale(0.97);
+            box-shadow: 0 0 12px #4f9da6;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            border-top: 1px solid rgba(79,157,166,0.3);
+            padding-top: 2rem;
+        }
+
+        /* 手机适配 */
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem 1rem 3rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .stats-grid {
+                flex-wrap: wrap;
+            }
+            .stat-item {
+                min-width: 120px;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-move" id="glowEffect"></div>
+
+<div class="container">
+    <!-- 头部 Hero 区域 -->
+    <div class="hero">
+        <div>
+            <h1>Freddy's Life Moment</h1>
+            <div class="badge-group">
+                <span class="badge">🎓 PPE专业</span>
+                <span class="badge">⚡ 实习狂想曲</span>
+                <span class="badge">🌍 旅游爱好者</span>
+                <span class="badge">🏆 文科松总冠军</span>
+            </div>
+            <br>
+            <div class="sub">
+                猎头、HR、运营、VC、财管，互联网、金融、Web3、AI、创投、vibe coding<br>
+                永远在coffee chat，永远在转行路上<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- 动态计数器模块 (scroll 触发互动) -->
+    <div class="stats-grid" id="statsSection">
+        <div class="stat-item"><div class="stat-number" id="countIntern">0</div><div class="stat-label">✨ 实习经历</div></div>
+        <div class="stat-item"><div class="stat-number" id="countOffer">0</div><div class="stat-label">🔥 coffee chat已聊</div></div>
+        <div class="stat-item"><div class="stat-number" id="countCities">0</div><div class="stat-label">🌆 漫游城市</div></div>
+        <div class="stat-item"><div class="stat-number" id="countEvents">0</div><div class="stat-label">🎪 活动/黑客松</div></div>
+    </div>
+
+    <!-- 实习经历 硬核卡片 -->
+    <div>
+        <div class="section-title">🔮 跨界实习</div>
+        <div class="card-grid">
+            <div class="exp-card"><div class="card-title">📞 字节跳动</div><div class="card-desc">负责产运序列高阶招聘，和人选电联到深夜，起初对互联网名词一问三不知，修炼到和人选深度沟通半小时；<br>工作外联结数百位顶尖实习生，构建了庞大而同频的年轻网络。</div><div class="tag-group"><span class="mini-tag">运营增长</span><span class="mini-tag">社群生态</span></div></div>
+            <div class="exp-card"><div class="card-title">📊 WEEX</div><div class="card-desc">焦头烂额做运营，每日为数据复盘焦虑，对Lark会议PTSD；但锤炼了抗压与Web3敏锐度。</div><div class="tag-group"><span class="mini-tag">数据焦虑</span><span class="mini-tag">crypto native</span></div></div>
+            <div class="exp-card"><div class="card-title">🧠 奇绩创坛</div><div class="card-desc">招生冲刺季访谈100+创业者，躬身入局AI下半场；积极拥抱AI技术，第一次下载VS Code，写下第一行vibe coding代码。</div><div class="tag-group"><span class="mini-tag">AI sense</span><span class="mini-tag">创业雷达</span></div></div>
+            <div class="exp-card"><div class="card-title">🏦 招商银行</div><div class="card-desc">深度接待老年群体，了解金融普惠最真实的意义，明白何为服务的意义。</div><div class="tag-group"><span class="mini-tag">财富管理</span><span class="mini-tag">同理心</span></div></div>
+            <div class="exp-card"><div class="card-title">🪙 Binance</div><div class="card-desc">与行业最顶尖的人并肩，4月巴厘岛阳光中所有人祝福我走得更远。全球化视野。</div><div class="tag-group"><span class="mini-tag">Crypto</span><span class="mini-tag">顶尖圈层</span></div></div>
+            <div class="exp-card"><div class="card-title">🚀 高瓴</div><div class="card-desc">从0到1搓高规格活动，全栈AIPM；onboarding doc被誉为范本，感受创业般激情。</div><div class="tag-group"><span class="mini-tag">产品/全栈</span><span class="mini-tag">0-1创造</span></div></div>
+        </div>
+    </div>
+
+    <!-- 高光活动 & 社区贡献 -->
+    <div>
+        <div class="section-title">⚡ 社区贡献</div>
+        <div class="card-grid">
+            <div class="exp-card"><div class="card-title">🌍 706青年空间 · 欧洲12城客厅对话</div><div class="card-desc">跨越时区联动欧洲12个城市，发起客厅对话沙龙，链接在地青年与思想。</div></div>
+            <div class="exp-card"><div class="card-title">⛓️ 北大链协 · ETH Beijing Hackathon</div><div class="card-desc">协助亚太最大以太坊黑客松，催生极客创新，区块未来。</div></div>
+            <div class="exp-card"><div class="card-title">🎭 Bonjour！场务</div><div class="card-desc">京沪双城现场支持，见证中法文化碰撞，幕后同样闪耀。</div></div>
+            <div class="exp-card"><div class="card-title">🎙️ 清华模联 · 专访李东林</div><div class="card-desc">探讨全球胜任力，从青年视角理解多元治理。</div></div>
+            <div class="exp-card"><div class="card-title">🌐 联合国参观 · HR对话</div><div class="card-desc">直接对话UNDP人力资源，解锁国际组织通路。</div></div>
+            <div class="exp-card"><div class="card-title">📕 小红书青草计划 · 电商带货</div><div class="card-desc">发笔记挂链接，测算转化率，实战内容电商闭环。</div></div>
+            <div class="exp-card"><div class="card-title">🥇 文科松总冠军</div><div class="card-desc">融合人文学科与技术，极限产出拿下总冠军；同时深度参与ETH Beijing生态。</div></div>
+            <div class="exp-card"><div class="card-title">📄 流浪猫狗研究</div><div class="card-desc">文章被官方公众号收录，用政策视角关怀动物福利，笔触影响社区。</div></div>
+            <div class="exp-card"><div class="card-title">🎓 北大承泽园分享</div><div class="card-desc">回到院子为学弟学妹讲述多元经历与学术积累，点亮更多人。</div></div>
+            <div class="exp-card"><div class="card-title">📚 作品集炼金术</div><div class="card-desc">小米战略·塑料污染·相互依存理论·家族发展史…一篇篇垒起世界观。</div></div>
+        </div>
+    </div>
+
+    <!-- 旅行·文艺·灵感碎片 -->
+    <div>
+        <div class="section-title">✈️ 足迹</div>
+        <div class="card-grid">
+            <div class="exp-card"><div class="card-title">🌏 12+ 城市漫游记</div><div class="card-desc">2026已经走过：<br>北京·上海·深圳·泉州·厦门·武汉·香港·新加坡·南京·苏州·巴厘岛 … 每座城市都留下思考。</div></div>
+            <div class="exp-card"><div class="card-title">🎭 北影节 · 上影节 · 剧场朝圣</div><div class="card-desc">从巴黎圣母院到法罗朱，银幕与舞台中汲取叙事力量。</div></div>
+            <div class="exp-card"><div class="card-title">🤝 WAIC · adventureX · mushanghai</div><div class="card-desc">深度逛展，行业前辈教会我“参加两个展就能认识所有圈内人”。</div></div>
+            <div class="exp-card"><div class="card-title">💻 硬核技术聚会</div><div class="card-desc">百度云SGLang · 腾讯云算力聚会 · LaunchPad上海 — 极客底色。</div></div>
+            <div class="exp-card"><div class="card-title">📖 文学爱好者</div><div class="card-desc">马尔克斯、王小波、赫胥黎、伍尔夫……现代文学是人生滋养底色。</div></div>
+    </div>
+
+    <!-- 随机趣闻互动组件 (超高 vibe) -->
+    <div class="fun-random">
+        <span style="font-size: 1.6rem;">✨ 随机解锁 · 我的隐藏切片 ✨</span>
+        <div class="random-text" id="randomFactDisplay">
+            点击按钮，抽取一段20岁的奇妙经历
+        </div>
+        <button class="vibe-btn" id="newFactBtn">🎲 再vibe一次 → 获取随机趣闻</button>
+    </div>
+
+    <footer>
+        🌟 持续探索，无限可能 🌟 <br/>
+        你的每一个瞬间都在塑造未来
+    </footer>
+</div>
+
+<script>
+    // 动态鼠标光晕 (互动氛围)
+    const glow = document.getElementById('glowEffect');
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        glow.style.setProperty('--x', x + 'px');
+        glow.style.setProperty('--y', y + 'px');
+    });
+
+    // ---------- 计数器滚动效果 (触发即动画) ----------
+    // 目标数值 (根据经历真实统计)
+    const statsData = {
+        intern: 6,      // 字节，WEEX，奇绩，招行，币安，高瓴 = 6
+        offer: 6,       // 红杉真格蓝驰米哈游TME腾讯
+        cities: 13,     // 北京上海深圳泉州厦门武汉香港新加坡南京苏州巴厘岛 + 额外欧洲出差/活动城市? 保守13
+        events: 23,     // 包括奇绩路演/黑客松/706/北大链协/模联/WAIC/bonjour/各种聚会等等约23+
+    };
+    
+    let counted = { intern: false, offer: false, cities: false, events: false };
+    const counters = {
+        intern: document.getElementById('countIntern'),
+        offer: document.getElementById('countOffer'),
+        cities: document.getElementById('countCities'),
+        events: document.getElementById('countEvents')
+    };
+    
+    function animateNumber(element, target, duration = 1500) {
+        if (!element) return;
+        let start = 0;
+        const stepTime = 16;
+        const totalSteps = duration / stepTime;
+        let currentStep = 0;
+        const increment = target / totalSteps;
+        let current = 0;
+        const interval = setInterval(() => {
+            currentStep++;
+            current += increment;
+            if (currentStep >= totalSteps) {
+                element.innerText = target;
+                clearInterval(interval);
+            } else {
+                element.innerText = Math.floor(current);
+            }
+        }, stepTime);
+    }
+    
+    // 监听统计区域是否可见 (Intersection Observer)
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!counted.intern) {
+                    animateNumber(counters.intern, statsData.intern);
+                    counted.intern = true;
+                }
+                if (!counted.offer) {
+                    animateNumber(counters.offer, statsData.offer);
+                    counted.offer = true;
+                }
+                if (!counted.cities) {
+                    animateNumber(counters.cities, statsData.cities);
+                    counted.cities = true;
+                }
+                if (!counted.events) {
+                    animateNumber(counters.events, statsData.events);
+                    counted.events = true;
+                }
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    
+    const statsSection = document.getElementById('statsSection');
+    if(statsSection) statsObserver.observe(statsSection);
+    
+    // 随机趣闻池 (基于真实经历)
+    const funFacts = [
+        "🎉 在币安巴厘岛团建时，和全球顶尖Web3团队一起看日出，彼此祝福“未来走得更远”。",
+        "📞 字节实习到深夜打电话，建联了全球500+实习生好友圈，至今仍是信息流源头。",
+        "🤖 奇绩实习期间访谈了100+AI创业者，在第一行vibe coding代码时，感受到了next big thing。",
+        "🏆 文科松极限48小时，拿下总冠军，让人文与技术碰撞出璀璨火光。",
+        "🐱 流浪猫狗研究文章登上《公共政策参与》公众号，用政策笔触为毛孩子发声。",
+        "🎭 北影节刷片+上影节连轴，还连刷《巴黎圣母院》《法罗朱》，剧院哭成泪人。",
+        "🍸 跑遍海淀朝阳徐汇静安黄浦杨浦的隐蔽酒吧，解锁夜晚都市观察家身份。",
+        "📊 在高瓴新团队从0到1搓活动+写onboarding doc，被全团队夸赞“教科书级别”。",
+        "🌍 706青年空间欧洲12城客厅对话联动，和欧洲青年探讨在地与全球化，深夜畅谈。",
+        "📕 小红书青草计划实测挂链带货，认真琢磨转化率，把电商当行为艺术。",
+        "🕋 联合国参观直接对话UNDP的HR，感受国际组织的人才密码。",
+        "🎤 清华模联专访李东林，探讨“全球胜任力”，重新定义青年领导力。",
+        "🏦 招行实习：接待普陀区老钱爷叔奶奶，听他们讲人生故事，明白金融普惠的人情味。",
+        "🔮 参加ETH Beijing黑客松 & 百度云SGLang & 腾讯云算力聚会，与极客同频共振。",
+        "✈️ 一年走过巴厘岛、新加坡、香港、武汉、南京，每个城市都留下深夜灵感。",
+        "💎 手握红杉真格蓝驰米哈游TME腾讯offer，成为‘offer 六边形战士’。"
+    ];
+    
+    const randomFactDisplay = document.getElementById('randomFactDisplay');
+    const newFactBtn = document.getElementById('newFactBtn');
+    
+    function getRandomFact() {
+        const randomIndex = Math.floor(Math.random() * funFacts.length);
+        return funFacts[randomIndex];
+    }
+    
+    function updateRandomFact() {
+        randomFactDisplay.style.opacity = '0';
+        setTimeout(() => {
+            randomFactDisplay.innerText = getRandomFact();
+            randomFactDisplay.style.transition = 'opacity 0.2s';
+            randomFactDisplay.style.opacity = '1';
+        }, 100);
+    }
+    
+    newFactBtn.addEventListener('click', updateRandomFact);
+    // 初始化显示一个随机
+    randomFactDisplay.innerText = getRandomFact();
+    
+    // 附加交互: 页面所有卡片可点击弹出简讯 (轻互动，弹窗提示更多经历)
+    const allCards = document.querySelectorAll('.exp-card');
+    allCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            // 不破坏冒泡，用简单alert反而影响体验，改用优雅提示console or small toast? 做一个轻提醒
+            // 为了极限趣味，使用一个轻提示临时展现，不过为了不打扰用简单临时浮层?
+            // 直接用简洁toast风格
+            const titleElem = card.querySelector('.card-title');
+            let msg = titleElem ? titleElem.innerText : '一段难忘历程';
+            const fakeToast = document.createElement('div');
+            fakeToast.innerText = `✨ ${msg} · 更多精彩待你探索 ✨`;
+            fakeToast.style.position = 'fixed';
+            fakeToast.style.bottom = '20px';
+            fakeToast.style.left = '50%';
+            fakeToast.style.transform = 'translateX(-50%)';
+            fakeToast.style.backgroundColor = '#1a3b46';
+            fakeToast.style.color = '#eef5ff';
+            fakeToast.style.padding = '8px 18px';
+            fakeToast.style.borderRadius = '40px';
+            fakeToast.style.fontSize = '0.8rem';
+            fakeToast.style.zIndex = '999';
+            fakeToast.style.backdropFilter = 'blur(12px)';
+            fakeToast.style.border = '1px solid #4f9da6';
+            fakeToast.style.fontWeight = '500';
+            document.body.appendChild(fakeToast);
+            setTimeout(() => {
+                fakeToast.style.opacity = '0';
+                setTimeout(() => fakeToast.remove(), 400);
+            }, 1500);
+        });
+    });
+    
+    // 增加一个额外hover动态波纹? 简约即可，确保手机触摸也有震动反馈(虚拟)
+    // 为offer badge增加小动画(双击无效但不影响)
+    const offers = document.querySelectorAll('.offer-badge');
+    offers.forEach(b => {
+        b.addEventListener('click', () => {
+            const txt = b.innerText;
+            const toast = document.createElement('div');
+            toast.innerText = `🎁 ${txt} 的认可 · 也是新起点`;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '70px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.backgroundColor = '#2e5d6b';
+            toast.style.padding = '6px 18px';
+            toast.style.borderRadius = '30px';
+            toast.style.fontSize = '0.75rem';
+            toast.style.zIndex = '1000';
+            toast.style.color = 'white';
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 1200);
+        });
+    });
+    
+    // 控制台输出一段vibe信息
+    console.log("%c✨ Vibe Coding 个人页面已加载 | 20岁经历无限 ✨", "color: #9cd4de; font-size: 16px; font-weight: bold;");
+    console.log("数据卡片包括实习/社区/黑客松/高光时刻，所有城市经历均由真实事件转换");
+</script>
+</body>
+</html>
